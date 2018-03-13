@@ -55,11 +55,11 @@ class RedisConsumer(object):
 
     def wait_for(self, task_id, callback, expires=None, persistent=None):
         key = self.producer.app.backend.get_key_for_task(task_id).decode('utf-8')
-        if expires:
-            timeout = self.producer.conn_pool.io_loop.add_timeout(
-                timedelta(microseconds=expires), self.on_timeout, key)
-        else:
-            timeout = None
+        # if expires:
+        #     timeout = self.producer.conn_pool.io_loop.add_timeout(
+        #         timedelta(microseconds=expires), self.on_timeout, key)
+        # else:
+        timeout = None
         self.subscriber.subscribe(
             key, partial(self.on_result, key, callback, timeout))
 
