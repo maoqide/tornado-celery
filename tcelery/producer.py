@@ -104,6 +104,9 @@ class NonBlockingTaskProducer(TaskProducer):
             common.maybe_declare(entity, self.channel, retry=True)
 
         publish = conn.publish
+        if retry:
+            # print "retrying"
+            publish = self.connection.ensure(self, publish, **retry_policy)
         result = publish(body, priority=priority, content_type=content_type,
                          content_encoding=content_encoding, headers=headers,
                          properties=properties, routing_key=routing_key,
